@@ -1,0 +1,75 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-base);
+}
+
+.alertBar {
+  padding: 8px 16px 0;
+  flex-shrink: 0;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.main {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.loadingOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8,12,20,0.6);
+  z-index: 10;
+  backdrop-filter: blur(2px);
+}
+
+.topPane {
+  display: flex;
+  flex: 1;
+  border-bottom: 1px solid var(--border-subtle);
+  min-height: 0;
+}
+
+.detailWrap {
+  flex: 1;
+  overflow-y: auto;
+  border-right: 1px solid var(--border-subtle);
+}
+
+.tradeLogWrap {
+  width: 240px;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.bottomPane {
+  flex-shrink: 0;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .tradeLogWrap { display: none; }
+}
+
+@media (max-width: 700px) {
+  .body { flex-direction: column; }
+  .shell { height: auto; overflow: auto; }
+  .main  { overflow: visible; }
+  .topPane { flex-direction: column; }
+  .detailWrap { border-right: none; border-bottom: 1px solid var(--border-subtle); }
+}

@@ -1,0 +1,28 @@
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: var(--loss-bg);
+  border: 1px solid var(--loss-dim);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--loss-bright);
+}
+.icon { font-size: 13px; flex-shrink: 0; }
+.message { flex: 1; }
+.retry {
+  background: transparent;
+  border: 1px solid var(--loss-bright);
+  color: var(--loss-bright);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 3px 10px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background var(--ease-fast);
+}
+.retry:hover { background: var(--loss-bg); }
