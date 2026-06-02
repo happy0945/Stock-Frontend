@@ -1,0 +1,132 @@
+.section {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.sectionHeader {
+  margin-bottom: 12px;
+}
+
+.sectionTitle {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--text-muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
+}
+
+/* ── Card ─────────────────────────────────────────────────────── */
+.card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: border-color var(--ease-fast), background var(--ease-fast), transform var(--ease-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  opacity: 0;
+  transition: opacity var(--ease-fast);
+}
+
+.gain::before  { background: var(--gain-bright); }
+.loss::before  { background: var(--loss-bright); }
+
+.card:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-hover);
+  transform: translateY(-1px);
+}
+
+.card:hover::before { opacity: 1; }
+
+.cardSelected {
+  border-color: var(--blue-mid) !important;
+  background: var(--bg-active) !important;
+}
+.cardSelected::before { background: var(--blue-bright) !important; opacity: 1 !important; }
+
+.flashGain { animation: flash-gain 0.5s ease forwards; }
+.flashLoss { animation: flash-loss 0.5s ease forwards; }
+
+@keyframes flash-gain {
+  0%   { background-color: rgba(245,166,35,0.14); }
+  100% { background-color: var(--bg-elevated); }
+}
+@keyframes flash-loss {
+  0%   { background-color: rgba(230,57,70,0.14); }
+  100% { background-color: var(--bg-elevated); }
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.cardSymbol {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+}
+
+.cardDir { font-size: 9px; }
+
+.cardPrice {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  animation: number-change 0.2s ease;
+}
+
+.cardBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cardPct {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.cardChange {
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.cardVol {
+  margin-top: 5px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+}
+
+.gain    { color: var(--gain-bright); }
+.loss    { color: var(--loss-bright); }
+.neutral { color: var(--text-secondary); }
+
+@keyframes number-change {
+  0%   { opacity:0.5; transform: translateY(-3px); }
+  100% { opacity:1;   transform: translateY(0); }
+}

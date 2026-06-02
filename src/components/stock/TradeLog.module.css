@@ -1,0 +1,80 @@
+.log {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.title {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--text-muted);
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.empty {
+  padding: 24px 16px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+.list {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 70px 1fr auto 12px;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background var(--ease-fast);
+}
+
+.row:hover { background: var(--bg-hover); }
+
+.rowTime {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.rowPrice {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: right;
+}
+
+.rowVol {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.rowArrow { font-size: 8px; text-align: center; }
+
+.gain    { color: var(--gain-bright); }
+.loss    { color: var(--loss-bright); }
+.neutral { color: var(--text-secondary); }

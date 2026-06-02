@@ -1,0 +1,284 @@
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-base);
+  position: relative;
+  overflow: hidden;
+  padding: 1.5rem;
+}
+
+/* Subtle grid overlay */
+.gridBg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* Corner accent lines */
+.cornerTL,
+.cornerBR {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  pointer-events: none;
+}
+.cornerTL {
+  top: 24px; left: 24px;
+  border-top: 2px solid var(--blue-mid);
+  border-left: 2px solid var(--blue-mid);
+  opacity: 0.4;
+}
+.cornerBR {
+  bottom: 24px; right: 24px;
+  border-bottom: 2px solid var(--gain-mid);
+  border-right: 2px solid var(--gain-mid);
+  opacity: 0.4;
+}
+
+/* ── Card ───────────────────────────────────────────────────────────────────── */
+.card {
+  position: relative;
+  z-index: 1;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  animation: cardIn 0.35s ease both;
+}
+
+.cardWide {
+  max-width: 860px;
+  padding: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Logo ───────────────────────────────────────────────────────────────────── */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+.logoIcon {
+  font-size: 1.5rem;
+}
+.logoText {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+/* ── Divider ────────────────────────────────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 1.25rem 0;
+}
+
+/* ── Headings ───────────────────────────────────────────────────────────────── */
+.title {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+.subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+/* ── Error box ──────────────────────────────────────────────────────────────── */
+.errorBox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--loss-bg);
+  border: 1px solid var(--loss-mid);
+  border-radius: 4px;
+  padding: 0.65rem 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--loss-bright);
+  margin-bottom: 1.25rem;
+}
+.errorIcon { font-size: 0.9rem; }
+
+/* ── Google button ──────────────────────────────────────────────────────────── */
+.googleBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.8rem 1.25rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 5px;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+.googleBtn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--blue-bright);
+  transform: translateY(-1px);
+}
+.googleBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+.googleBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Legal note & links ─────────────────────────────────────────────────────── */
+.legalNote {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 1rem;
+}
+.link {
+  color: var(--blue-bright);
+  text-decoration: none;
+}
+.link:hover { text-decoration: underline; }
+
+.switchText {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* ─── Register-only: two-column layout ──────────────────────────────────────── */
+
+/* Left panel */
+.leftPanel {
+  flex: 0 0 340px;
+  background: var(--bg-elevated);
+  border-right: 1px solid var(--border-default);
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.panelTitle {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+  margin-bottom: 0.4rem;
+}
+.panelSub {
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.perkList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+.perkItem {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-primary);
+}
+.perkIcon {
+  font-size: 1rem;
+  width: 1.4rem;
+  text-align: center;
+}
+
+.statsRow {
+  display: flex;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-subtle);
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.statVal {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gain-bright);
+}
+.statLbl {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Right panel */
+.rightPanel {
+  flex: 1;
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .cardWide {
+    flex-direction: column;
+  }
+  .leftPanel {
+    flex: none;
+    border-right: none;
+    border-bottom: 1px solid var(--border-default);
+  }
+  .statsRow {
+    gap: 1.5rem;
+  }
+}
