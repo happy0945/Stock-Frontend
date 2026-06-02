@@ -1,7 +1,7 @@
 
 import { io } from "socket.io-client";
 
-const WS_URL = import.meta.env.VITE_WS_URL || "http://localhost:5000";
+const WS_URL = import.meta.env.VITE_WS_URL || "https://stock-app-1-7imv.onrender.com";
 
 const socket = io(WS_URL, {
   autoConnect: false,
