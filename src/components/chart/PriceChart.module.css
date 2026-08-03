@@ -1,58 +1,110 @@
 .chartWrap {
-  padding: 16px 0 8px;
+  background: var(--bg-surface, #0d1421);
+  border: 1px solid var(--border-default, #243048);
+  border-radius: 10px;
+  padding: 16px 12px 10px;
+  margin-top: 14px;
+  box-shadow: var(--shadow-md);
+  position: relative;
 }
 
 .chartHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px 12px;
+  padding: 0 8px 12px;
+  border-bottom: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.05));
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mountainIcon {
+  font-size: 14px;
 }
 
 .chartTitle {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-primary, #e8edf5);
+}
+
+.liveTag {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--live-color, #22c55e);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  font-family: var(--font-mono, monospace);
   font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  color: var(--text-muted);
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.06em;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.statPill {
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  color: var(--text-secondary, #8a9ab8);
+  background: var(--bg-elevated, #111827);
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.06));
 }
 
 .chartPoints {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--text-muted);
-}
-
-.empty {
-  height: 240px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-muted);
-  letter-spacing: 0.08em;
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted, #4a5a78);
 }
 
 .tooltip {
-  background: var(--bg-elevated);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-md);
-  padding: 6px 10px;
+  background: var(--bg-elevated, #111827);
+  border: 1px solid var(--border-strong, #2e3f5c);
+  border-radius: var(--radius-md, 4px);
+  padding: 8px 12px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
+  box-shadow: var(--shadow-lg);
+}
+
+.tooltipHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tooltipDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--blue-bright, #38bdf8);
 }
 
 .tooltipPrice {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary, #e8edf5);
 }
 
 .tooltipTime {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--text-muted);
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  color: var(--text-muted, #8a9ab8);
 }
