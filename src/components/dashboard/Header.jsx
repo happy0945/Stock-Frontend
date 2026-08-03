@@ -26,6 +26,8 @@ const Clock = () => {
   );
 };
 
+import ThemeToggle from "@/components/common/ThemeToggle";
+
 const Header = () => (
   <header className={styles.header}>
     <div className={styles.left}>
@@ -39,7 +41,8 @@ const Header = () => (
     <div className={styles.right}>
       <Clock />
       <LiveBadge />
-      <ProfileAvatar /> {/* ← NEW */}
+      <ThemeToggle />
+      <ProfileAvatar />
     </div>
   </header>
 );

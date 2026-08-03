@@ -15,7 +15,8 @@ import { useDispatch } from "react-redux";
 import { loadQuotes, selectWatchlist } from "@/store/slices/stocksSlice";
 import styles from "./Dashboard.module.css";
 import TradeButtons from "@/components/stock/TradeButtons";
- // use your actual selector 
+import AIPredictionPanel from "@/components/stock/AIPredictionPanel";
+
 const Dashboard = () => {
   const dispatch   = useDispatch();
   const loading    = useSelector(selectLoading);
@@ -59,13 +60,13 @@ const Dashboard = () => {
             </div>
           )}
 
-          {/* Top: detail + chart */}
+          {/* Top: detail + chart + AI insights */}
           <div className={styles.topPane}>
             <div className={styles.detailWrap}>
-
               <StockDetail />
-               <TradeButtons symbol={selectedSymbol} />  {/* ← add this line */}
+              <TradeButtons symbol={selectedSymbol} />
               <PriceChart />
+              <AIPredictionPanel />
             </div>
             <div className={styles.tradeLogWrap}>
               <TradeLog />

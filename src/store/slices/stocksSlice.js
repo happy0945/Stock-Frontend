@@ -6,6 +6,7 @@ import {
   fetchSubscriptions,
   subscribeSymbol as apiSubscribe,
   unsubscribeSymbol as apiUnsubscribe,
+  fetchAiPrediction,
 } from "@/services/api";
 
 // Max data points kept per symbol in history (for sparklines)
@@ -64,6 +65,18 @@ export const removeFromWatchlist = createAsyncThunk(
   }
 );
 
+export const loadAiPrediction = createAsyncThunk(
+  "stocks/loadAiPrediction",
+  async (symbol, { rejectWithValue }) => {
+    try {
+      const response = await fetchAiPrediction(symbol);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 // ── Slice ─────────────────────────────────────────────────────────────────────
 
 const stocksSlice = createSlice({
@@ -75,6 +88,9 @@ const stocksSlice = createSlice({
     trades: {},
     // symbol → array of { price, timestamp } (max MAX_HISTORY)
     history: {},
+    // symbol → AI prediction object
+    aiPredictions: {},
+    aiLoading: {},
     // user's watchlist
     watchlist: DEFAULT_WATCHLIST,
     // currently selected symbol for the detail view
@@ -144,9 +160,11 @@ const stocksSlice = createSlice({
       })
       .addCase(loadQuotes.fulfilled, (state, action) => {
         state.loading = false;
-        for (const result of action.payload) {
-          if (result.data) {
-            state.quotes[result.symbol] = result.data;
+        if (Array.isArray(action.payload)) {
+          for (const result of action.payload) {
+            if (result.data) {
+              state.quotes[result.symbol] = result.data;
+            }
           }
         }
       })
@@ -158,7 +176,7 @@ const stocksSlice = createSlice({
     // loadSubscriptions
     builder.addCase(loadSubscriptions.fulfilled, (state, action) => {
       // Merge server subscriptions into watchlist
-      const merged = new Set([...state.watchlist, ...action.payload]);
+      const merged = new Set([...state.watchlist, ...(action.payload || [])]);
       state.watchlist = [...merged];
     });
 
@@ -176,6 +194,21 @@ const stocksSlice = createSlice({
         state.selectedSymbol = state.watchlist[0] || null;
       }
     });
+
+    // loadAiPrediction
+    builder
+      .addCase(loadAiPrediction.pending, (state, action) => {
+        state.aiLoading[action.meta.arg] = true;
+      })
+      .addCase(loadAiPrediction.fulfilled, (state, action) => {
+        state.aiLoading[action.meta.arg] = false;
+        if (action.payload?.symbol) {
+          state.aiPredictions[action.payload.symbol] = action.payload;
+        }
+      })
+      .addCase(loadAiPrediction.rejected, (state, action) => {
+        state.aiLoading[action.meta.arg] = false;
+      });
   },
 });
 
@@ -202,5 +235,7 @@ export const selectFlashState = (symbol) => (state) =>
   state.stocks.flashState[symbol];
 export const selectLoading = (state) => state.stocks.loading;
 export const selectError = (state) => state.stocks.error;
+export const selectAiPrediction = (symbol) => (state) => state.stocks.aiPredictions[symbol];
+export const selectAiLoading = (symbol) => (state) => state.stocks.aiLoading[symbol];
 
 export default stocksSlice.reducer;

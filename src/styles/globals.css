@@ -88,6 +88,40 @@
   --shadow-glow-loss: 0 0 16px rgba(230, 57, 70, 0.2);
 }
 
+/* ── Light Theme Overrides ──────────────────────────────────────────────────── */
+[data-theme="light"] {
+  --bg-base:        #f4f6f9;
+  --bg-surface:     #ffffff;
+  --bg-elevated:    #eef2f6;
+  --bg-hover:       #e2e8f0;
+  --bg-active:      #cbd5e1;
+
+  --border-subtle:  #e2e8f0;
+  --border-default: #cbd5e1;
+  --border-strong:  #94a3b8;
+
+  --text-primary:   #0f172a;
+  --text-secondary: #334155;
+  --text-muted:     #64748b;
+  --text-disabled:  #94a3b8;
+
+  --gain-bright:    #16a34a;
+  --gain-mid:       #15803d;
+  --gain-bg:        rgba(22, 163, 74, 0.08);
+
+  --loss-bright:    #dc2626;
+  --loss-mid:       #b91c1c;
+  --loss-bg:        rgba(220, 38, 38, 0.08);
+
+  --blue-bright:    #0284c7;
+  --blue-mid:       #0369a1;
+  --blue-bg:        rgba(2, 132, 199, 0.08);
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
 /* ── Base ──────────────────────────────────────────────────────────────────── */
 html {
   font-size: 14px;

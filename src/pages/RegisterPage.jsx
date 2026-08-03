@@ -1,7 +1,7 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import ThemeToggle from "@/components/common/ThemeToggle";
 import styles from "./AuthPages.module.css";
 
 const GoogleIcon = () => (
@@ -14,17 +14,43 @@ const GoogleIcon = () => (
 );
 
 const PERKS = [
-  { icon: "⚡", text: "Sub-100ms live price feeds" },
-  { icon: "📊", text: "Interactive candlestick charts" },
-  { icon: "🔔", text: "Custom price alerts" },
-  { icon: "📋", text: "Personal watchlist sync" },
+  { icon: "⚡", text: "Sub-100ms real-time trade ticks" },
+  { icon: "🤖", text: "AI Price Prediction & LLM analysis" },
+  { icon: "📊", text: "Interactive mountain & candle charts" },
+  { icon: "📰", text: "Live real-time market news stream" },
 ];
 
 export default function RegisterPage() {
-  const { loginWithGoogle, loading } = useAuth();
+  const { register, loginWithGoogle, loading } = useAuth();
   const navigate = useNavigate();
+
+  const [displayName, setDisplayName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [busy, setBusy]   = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  const handleManualRegister = async (e) => {
+    e.preventDefault();
+    if (!email || !password) {
+      setError("Please fill in all required fields.");
+      return;
+    }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+    setError("");
+    setBusy(true);
+    try {
+      await register(email, password, displayName);
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.message || "Could not complete registration.");
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const handleGoogle = async () => {
     setError("");
@@ -43,6 +69,10 @@ export default function RegisterPage() {
     <div className={styles.page}>
       <div className={styles.gridBg} aria-hidden="true" />
 
+      <div style={{ position: "absolute", top: 20, right: 20, zIndex: 10 }}>
+        <ThemeToggle />
+      </div>
+
       <div className={`${styles.card} ${styles.cardWide}`}>
         {/* Left panel — perks */}
         <div className={styles.leftPanel}>
@@ -52,7 +82,7 @@ export default function RegisterPage() {
           </div>
           <h2 className={styles.panelTitle}>Start trading smarter</h2>
           <p className={styles.panelSub}>
-            A free account gives you instant access to everything on the platform.
+            Join StockPulse to access real-time market data, AI predictions, and live market streaming.
           </p>
           <ul className={styles.perkList}>
             {PERKS.map(({ icon, text }) => (
@@ -82,7 +112,7 @@ export default function RegisterPage() {
         <div className={styles.rightPanel}>
           <h1 className={styles.title}>Create Account</h1>
           <p className={styles.subtitle}>
-            Get started in seconds — no credit card needed.
+            Register with Email & Password or Google to unlock full terminal capabilities.
           </p>
 
           {error && (
@@ -90,6 +120,96 @@ export default function RegisterPage() {
               <span className={styles.errorIcon}>⚠</span> {error}
             </div>
           )}
+
+          <form onSubmit={handleManualRegister} style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "14px" }}>
+            <div>
+              <label style={{ display: "block", fontSize: "11px", fontFamily: "var(--font-mono)", color: "var(--text-secondary)", marginBottom: "4px" }}>FULL NAME</label>
+              <input
+                type="text"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                placeholder="Alex Morgan"
+                style={{
+                  width: "100%",
+                  padding: "9px 12px",
+                  background: "var(--bg-elevated)",
+                  border: "1px solid var(--border-default)",
+                  borderRadius: "5px",
+                  color: "var(--text-primary)",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "12px"
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ display: "block", fontSize: "11px", fontFamily: "var(--font-mono)", color: "var(--text-secondary)", marginBottom: "4px" }}>EMAIL ADDRESS *</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="user@example.com"
+                required
+                style={{
+                  width: "100%",
+                  padding: "9px 12px",
+                  background: "var(--bg-elevated)",
+                  border: "1px solid var(--border-default)",
+                  borderRadius: "5px",
+                  color: "var(--text-primary)",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "12px"
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ display: "block", fontSize: "11px", fontFamily: "var(--font-mono)", color: "var(--text-secondary)", marginBottom: "4px" }}>PASSWORD (MIN 6 CHARS) *</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                minLength={6}
+                style={{
+                  width: "100%",
+                  padding: "9px 12px",
+                  background: "var(--bg-elevated)",
+                  border: "1px solid var(--border-default)",
+                  borderRadius: "5px",
+                  color: "var(--text-primary)",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "12px"
+                }}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={busy || loading}
+              style={{
+                marginTop: "4px",
+                padding: "10px",
+                background: "linear-gradient(135deg, #16a34a, #059669)",
+                border: "none",
+                borderRadius: "5px",
+                color: "#ffffff",
+                fontFamily: "var(--font-mono)",
+                fontWeight: 700,
+                fontSize: "13px",
+                cursor: "pointer"
+              }}
+            >
+              {busy ? "CREATING ACCOUNT..." : "CREATE ACCOUNT WITH EMAIL"}
+            </button>
+          </form>
+
+          <div style={{ display: "flex", alignItems: "center", margin: "10px 0", gap: "10px" }}>
+            <div style={{ flex: 1, height: "1px", background: "var(--border-subtle)" }} />
+            <span style={{ fontSize: "11px", fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>OR</span>
+            <div style={{ flex: 1, height: "1px", background: "var(--border-subtle)" }} />
+          </div>
 
           <button
             className={styles.googleBtn}

@@ -46,6 +46,13 @@ api.interceptors.response.use(
   }
 );
 
+// ── Auth endpoints ────────────────────────────────────────────────────────────
+export const loginUser            = (data)    => api.post(`/auth/login`, data);
+export const registerUser         = (data)    => api.post(`/auth/register`, data);
+export const googleAuthUser       = (idToken) => api.post(`/auth/google`, { idToken });
+export const fetchMe              = ()        => api.get(`/auth/me`);
+export const updateProfileApi     = (data)    => api.put(`/auth/profile`, data);
+
 // ── Stock endpoints ───────────────────────────────────────────────────────────
 export const fetchStockQuote      = (symbol)  => api.get(`/stocks`, { params: { symbol } });
 export const fetchMultipleQuotes  = (symbols) => api.get(`/stocks/multiple`, { params: { symbols: symbols.join(",") } });
@@ -53,5 +60,7 @@ export const fetchSubscriptions   = ()        => api.get(`/stocks/subscriptions`
 export const subscribeSymbol      = (symbol)  => api.post(`/stocks/subscribe`, { symbol });
 export const unsubscribeSymbol    = (symbol)  => api.delete(`/stocks/subscribe`, { data: { symbol } });
 export const fetchHealth          = ()        => api.get(`/stocks/health`);
+export const fetchAiPrediction    = (symbol)  => api.get(`/stocks/ai-prediction`, { params: { symbol } });
+export const fetchMarketNews      = ()        => api.get(`/stocks/news`);
 
 export default api;

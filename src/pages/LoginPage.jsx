@@ -1,8 +1,7 @@
-
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import ThemeToggle from "@/components/common/ThemeToggle";
 import styles from "./AuthPages.module.css";
 
 const GoogleIcon = () => (
@@ -15,10 +14,31 @@ const GoogleIcon = () => (
 );
 
 export default function LoginPage() {
-  const { loginWithGoogle, loading } = useAuth();
+  const { login, loginWithGoogle, loading } = useAuth();
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [busy, setBusy]   = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  const handleManualLogin = async (e) => {
+    e.preventDefault();
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      return;
+    }
+    setError("");
+    setBusy(true);
+    try {
+      await login(email, password);
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.message || "Invalid email or password.");
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const handleGoogle = async () => {
     setError("");
@@ -35,11 +55,13 @@ export default function LoginPage() {
 
   return (
     <div className={styles.page}>
-      {/* Ambient grid background */}
       <div className={styles.gridBg} aria-hidden="true" />
 
+      <div style={{ position: "absolute", top: 20, right: 20, zIndex: 10 }}>
+        <ThemeToggle />
+      </div>
+
       <div className={styles.card}>
-        {/* Logo */}
         <div className={styles.logo}>
           <span className={styles.logoIcon}>⚡</span>
           <span className={styles.logoText}>StockPulse</span>
@@ -49,7 +71,7 @@ export default function LoginPage() {
 
         <h1 className={styles.title}>Sign In</h1>
         <p className={styles.subtitle}>
-          Access live markets, your watchlist, and real-time alerts.
+          Access real-time markets, watchlist, and AI stock analytics.
         </p>
 
         {error && (
@@ -58,7 +80,75 @@ export default function LoginPage() {
           </div>
         )}
 
-        {/* Google OAuth button */}
+        <form onSubmit={handleManualLogin} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+          <div>
+            <label style={{ display: "block", fontSize: "11px", fontFamily: "var(--font-mono)", color: "var(--text-secondary)", marginBottom: "4px" }}>EMAIL ADDRESS</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="user@example.com"
+              required
+              style={{
+                width: "100%",
+                padding: "10px 12px",
+                background: "var(--bg-elevated)",
+                border: "1px solid var(--border-default)",
+                borderRadius: "5px",
+                color: "var(--text-primary)",
+                fontFamily: "var(--font-mono)",
+                fontSize: "13px"
+              }}
+            />
+          </div>
+
+          <div>
+            <label style={{ display: "block", fontSize: "11px", fontFamily: "var(--font-mono)", color: "var(--text-secondary)", marginBottom: "4px" }}>PASSWORD</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              required
+              style={{
+                width: "100%",
+                padding: "10px 12px",
+                background: "var(--bg-elevated)",
+                border: "1px solid var(--border-default)",
+                borderRadius: "5px",
+                color: "var(--text-primary)",
+                fontFamily: "var(--font-mono)",
+                fontSize: "13px"
+              }}
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={busy || loading}
+            style={{
+              marginTop: "4px",
+              padding: "11px",
+              background: "linear-gradient(135deg, #0284c7, #2563eb)",
+              border: "none",
+              borderRadius: "5px",
+              color: "#ffffff",
+              fontFamily: "var(--font-mono)",
+              fontWeight: 700,
+              fontSize: "13px",
+              cursor: "pointer"
+            }}
+          >
+            {busy ? "AUTHENTICATING..." : "SIGN IN WITH EMAIL"}
+          </button>
+        </form>
+
+        <div style={{ display: "flex", alignItems: "center", margin: "16px 0", gap: "10px" }}>
+          <div style={{ flex: 1, height: "1px", background: "var(--border-subtle)" }} />
+          <span style={{ fontSize: "11px", fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>OR</span>
+          <div style={{ flex: 1, height: "1px", background: "var(--border-subtle)" }} />
+        </div>
+
         <button
           className={styles.googleBtn}
           onClick={handleGoogle}
@@ -85,7 +175,6 @@ export default function LoginPage() {
         </p>
       </div>
 
-      {/* Corner decorations */}
       <div className={styles.cornerTL} aria-hidden="true" />
       <div className={styles.cornerBR} aria-hidden="true" />
     </div>

@@ -1,73 +1,136 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import {
-  onAuthChange,
   signInWithGoogle,
   firebaseSignOut,
 } from "@/services/firebase";
-import api from "@/services/api";
+import {
+  loginUser as apiLogin,
+  registerUser as apiRegister,
+  googleAuthUser as apiGoogleAuth,
+  fetchMe as apiFetchMe,
+  updateProfileApi,
+} from "@/services/api";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser]       = useState(null);
+  const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const unsubscribe = onAuthChange(async (firebaseUser) => {
-      setUser(firebaseUser);
-
-      if (firebaseUser) {
-        try {
-          const idToken = await firebaseUser.getIdToken();
-          const { data } = await api.post("/auth/google", { idToken });
-          setProfile(data.user);
-          localStorage.setItem("sp_token", data.token);
-        } catch {
-          setProfile(null);
-        }
-      } else {
-        setProfile(null);
-        localStorage.removeItem("sp_token");
-      }
-
+  const initAuth = useCallback(async () => {
+    const token = localStorage.getItem("sp_token");
+    if (!token) {
+      setProfile(null);
+      setUser(null);
       setLoading(false);
-    });
+      return;
+    }
 
-    return unsubscribe;
+    try {
+      const data = await apiFetchMe();
+      if (data?.user) {
+        setProfile(data.user);
+        setUser(data.user);
+      } else {
+        localStorage.removeItem("sp_token");
+        setProfile(null);
+        setUser(null);
+      }
+    } catch {
+      localStorage.removeItem("sp_token");
+      setProfile(null);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
+  useEffect(() => {
+    initAuth();
+  }, [initAuth]);
+
+  // Manual Email/Password Login
+  const login = async (email, password) => {
+    setLoading(true);
+    try {
+      const res = await apiLogin({ email, password });
+      if (res?.token && res?.user) {
+        localStorage.setItem("sp_token", res.token);
+        setProfile(res.user);
+        setUser(res.user);
+        return res.user;
+      }
+      throw new Error(res?.error?.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Manual Email/Password Register
+  const register = async (email, password, displayName) => {
+    setLoading(true);
+    try {
+      const res = await apiRegister({ email, password, displayName });
+      if (res?.token && res?.user) {
+        localStorage.setItem("sp_token", res.token);
+        setProfile(res.user);
+        setUser(res.user);
+        return res.user;
+      }
+      throw new Error(res?.error?.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Google OAuth Login
   const loginWithGoogle = async () => {
     setLoading(true);
     try {
-      await signInWithGoogle();
-    } catch (err) {
+      const firebaseUser = await signInWithGoogle();
+      const idToken = await firebaseUser.getIdToken();
+      const res = await apiGoogleAuth(idToken);
+
+      if (res?.token && res?.user) {
+        localStorage.setItem("sp_token", res.token);
+        setProfile(res.user);
+        setUser(res.user);
+        return res.user;
+      }
+      throw new Error("Google login failed");
+    } finally {
       setLoading(false);
-      throw err;
     }
   };
 
   const logout = async () => {
-    await firebaseSignOut();
+    try {
+      await firebaseSignOut();
+    } catch {
+      /* ignore firebase signOut errors if logged in via local */
+    }
+    localStorage.removeItem("sp_token");
+    setProfile(null);
+    setUser(null);
   };
 
   const refreshProfile = async () => {
-    if (!user) return;
     try {
-      const { data } = await api.get("/auth/me");
-      setProfile(data.user);
+      const data = await apiFetchMe();
+      if (data?.user) {
+        setProfile(data.user);
+        setUser(data.user);
+      }
     } catch {/* silent */}
   };
 
-  // ── NEW: update name/email/avatar locally + persist to backend ──
   const updateProfile = async (updatedFields) => {
-    // Optimistically update UI immediately
     setProfile((prev) => ({ ...prev, ...updatedFields }));
     try {
-      const { data } = await api.patch("/auth/profile", updatedFields);
-      setProfile(data.user); // sync with server response
+      const data = await updateProfileApi(updatedFields);
+      if (data?.user) setProfile(data.user);
     } catch {
-      // If backend fails, revert to refreshed profile
       await refreshProfile();
     }
   };
@@ -76,12 +139,14 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
-        profile,
+        profile: profile || user,
         loading,
+        login,
+        register,
         loginWithGoogle,
         logout,
         refreshProfile,
-        updateProfile, // ← NEW
+        updateProfile,
       }}
     >
       {children}
